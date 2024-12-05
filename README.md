@@ -1,80 +1,77 @@
-  public ActionForward viewAll(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+ public ArrayList getQueryResult(String filterValues, String queryString, String sourceMode, String searchFilterValues, String listAll) throws Exception
     {
-        String target = "loadModalPopupSuccess";
-        SelectionPopupDAO selectionPopupDAO = new SelectionPopupDAO();
-        SelectionPopupValueObject selectionPopupVO = null;
-        ModalSelectionPopupForm modalselectionPopupForm = null;
-        StringBuffer htmlStr = new StringBuffer();
-        boolean buildTable = false;
-        boolean displayColumn = false;
-        
-        String valueStr = "";
-        String[] searchColCaptionArray = null;
-        String[] searchFilterArray = null;
-        String[] searchValues = null;
-        String[] sortColsCaptionsArray = null;
-        String[] sortColsArray = null;
-        String[] imagePathArray = null;
-        String[] invokeFunctionArray = null;
-        int searchCntlCount = 0;
-        String searchCntlNames = "";
-        String searchCntl = "";
-        String dataType = "";
-        int gridDataSize =0;
-        int recordSize = 0;
-        int displayColArraySize = 0;
-        int populateColArraySize = 0;
-        int columnCaptionArraySize = 0;
-        ArrayList resultArrayList = null;
-        HttpSession session = null;
-        String appId = "";
-        
-        try
+        String[] filterValuesArray = null;
+        String[] filterDataTypeArray = null;
+        String[] searchFilterValuesArray = null;
+        int filterCriteriaCount = 0;
+        ArrayList filterCriteria = new ArrayList();
+        ArrayList resultArray = null;
+        String refreshOnLoad = Constant.YES;
+        StringBuffer popupQuery = new StringBuffer();
+        StringBuffer tempPopupQuery = new StringBuffer();
+
+        if (searchFilterValues != null && !searchFilterValues.trim().equals(""))
+            searchFilterValuesArray = STKGeneral.split(searchFilterValues, Constant.DELIMITER_CARRET);
+
+        if (searchFilterValuesArray != null && searchFilterValuesArray.length > 0)
         {
-            isSessionExpired(request, response);
-            modalselectionPopupForm = (ModalSelectionPopupForm) form;
-            session = request.getSession(false);
-            appId = (String) session.getAttribute(SessionConstants.APP_ID);
-
-            selectionPopupVO = modalselectionPopupForm.createValueObject();
-
-            logger.debug("POPUP QRY INDEX::::>'" + selectionPopupVO.getQueryIndex()+"'");
-            logger.debug("POPUP QRY :::::::::>'" + SQLQuery.getQuery(STKGeneral.getInteger(selectionPopupVO.getQueryIndex())) + "'");
-            String clientId         = selectionPopupVO.getClientId();
-            System.out.println(clientId);
-
-            ArrayList gridData = null;
-            
-            if(selectionPopupVO.getPagination() != null && selectionPopupVO.getPagination().equals(Constant.YES))
+            String[] tempArray = null;
+            for (int i = 0; i < searchFilterValuesArray.length; i++)
             {
-            	
-            	String startSeqNoStr 	= selectionPopupVO.getStartSeqNo();
-                String endSeqNoStr 		= selectionPopupVO.getEndSeqNo();
-                String rowCountStr 		= selectionPopupVO.getRowCount();
-                String startSeqNo 		= "0";
-                String endSeqNo 		= "0";
-                int rowCount 			= 0;
-
-                if (startSeqNoStr != null && startSeqNoStr.trim().length() > 0)
-                    startSeqNo = startSeqNoStr;
-
-                if (endSeqNoStr != null && endSeqNoStr.trim().length() > 0)
-                    endSeqNo = endSeqNoStr;
-
-                if (rowCountStr != null && rowCountStr.trim().length() > 0)
-                    rowCount = STKGeneral.getInteger(rowCountStr);
-
-                String navigationValue = selectionPopupVO.getNavigationValue();
-                resultArrayList = new ArrayList();
-                String sqlQuery = SQLQuery.getQuery(STKGeneral.getInteger(selectionPopupVO.getQueryIndex())).toUpperCase();
-                resultArrayList = selectionPopupDAO.getQueryResult(selectionPopupVO.getFltrValsDataType(), sqlQuery, selectionPopupVO
-                         .getSourceMode(), selectionPopupVO.getSearchFltrValsDataType(), selectionPopupVO.getListAll(),
-                         selectionPopupVO.getPaginationKeyField(),sqlQuery,startSeqNo, endSeqNo, rowCount, navigationValue, selectionPopupVO.getPageNo());
-                gridData =(ArrayList) resultArrayList.get(0);
-            	 
+                tempArray = STKGeneral.split(STKGeneral.nullCheck(searchFilterValuesArray[i]).trim(), Constant.DELIMITER_PIPE);
+                if (tempArray != null && tempArray.length > 0 && (!STKGeneral.nullCheck(tempArray[0]).trim().equals("")))
+                {
+                    sourceMode = Constant.SEARCH_MODE;
+                    break;
+                }
             }
-            else
+        }
+
+        if (refreshOnLoad.equalsIgnoreCase(Constant.CHAR_YES) || sourceMode.equalsIgnoreCase(Constant.SEARCH_MODE))
+        {
+            filterValuesArray = STKGeneral.split(filterValues, Constant.DELIMITER_CARRET);
+            popupQuery.append(STKGeneral.nullCheck(queryString).trim());
+
+            if (!filterValues.equals("") && filterValuesArray != null)
             {
-            	gridData = selectionPopupDAO.getQueryResult(selectionPopupVO.getFltrValsDataType(), SQLQuery.getQuery(STKGeneral.getInteger(selectionPopupVO.getQueryIndex())), selectionPopupVO
-                        .getSourceMode(), selectionPopupVO.getSearchFltrValsDataType(), selectionPopupVO.getListAll());
+                for (int i = 0; i < filterValuesArray.length; i++)
+                {
+                    filterDataTypeArray = STKGeneral.split(STKGeneral.nullCheck(filterValuesArray[i]).trim(), Constant.DELIMITER_PIPE);
+
+                    if (filterDataTypeArray != null && filterDataTypeArray.length == 2)
+                    {
+                        filterCriteria.add(STKGeneral.split(++filterCriteriaCount + Constant.DELIMITER_PIPE + STKGeneral.nullCheck(filterDataTypeArray[0]).trim() + Constant.DELIMITER_PIPE
+                                + STKGeneral.nullCheck(filterDataTypeArray[1]).trim(), Constant.DELIMITER_PIPE));
+                    }
+                }
             }
+
+            if (searchFilterValuesArray != null && !searchFilterValues.equals(""))
+            {
+                for (int i = 0; i < searchFilterValuesArray.length; i++)
+                {
+                    filterDataTypeArray = STKGeneral.split(STKGeneral.nullCheck(searchFilterValuesArray[i]).trim(), Constant.DELIMITER_PIPE);
+
+                    if (filterDataTypeArray != null && filterDataTypeArray.length == 2)
+                    {
+                        if (STKGeneral.nullCheck(listAll).trim().equalsIgnoreCase(Constant.CHAR_YES))
+                        {
+                            filterCriteria.add(STKGeneral.split(++filterCriteriaCount + "|%|" + STKGeneral.nullCheck(filterDataTypeArray[1]).trim(), Constant.DELIMITER_PIPE));
+                        }
+                        else
+                        {
+                            filterCriteria.add(STKGeneral.split(++filterCriteriaCount + Constant.DELIMITER_PIPE + STKGeneral.nullCheck(filterDataTypeArray[0]).trim() + "%|"
+                                    + STKGeneral.nullCheck(filterDataTypeArray[1]).trim(), Constant.DELIMITER_PIPE));
+                        }
+                    }
+                }
+            }
+
+            resultArray = getResultset(filterCriteria, popupQuery.toString());
+
+        }
+
+        return resultArray;
+    }
+    
+    
