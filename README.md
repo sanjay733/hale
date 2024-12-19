@@ -1,57 +1,236 @@
-
-    try {
-        // Establish connection
-        connObj = getConnection();
-        stmtObj = connObj.prepareStatement(sqlStr);
-
-        // Bind parameters from criteria
-        for (int iterator = 0; iterator < criteria.size(); iterator++) {
-            String[] strArray = (String[]) criteria.get(iterator);
-
-            logger.debug("Binding parameter at index: " + strArray[FIELD] + ", VALUE: " + strArray[VALUE] + ", DATATYPE: " + strArray[DATATYPE]);
-
-            switch (strArray[DATATYPE]) {
-                case STRING:
-                    stmtObj.setString(Integer.parseInt(strArray[FIELD]), strArray[VALUE]);
-                    break;
-
-                case DATE:
-                    String dateValue = strArray[VALUE];
-                    if (dateValue.length() == 10) {
-                        dateValue += " 00:00:00";
-                    }
-                    stmtObj.setTimestamp(Integer.parseInt(strArray[FIELD]), java.sql.Timestamp.valueOf(dateValue));
-                    break;
-
-                case NUMERIC:
-                    stmtObj.setBigDecimal(Integer.parseInt(strArray[FIELD]), new BigDecimal(strArray[VALUE]));
-                    break;
-
-                default:
-                    throw new IllegalArgumentException("Unsupported data type: " + strArray[DATATYPE]);
-            }
-        }
-
-        // Execute query and process results
-        logger.debug("Executing SQL: " + sqlStr);
-        resultSet = stmtObj.executeQuery();
-
-        if (resultSet != null) {
-            resultArray = mapResultsList(resultSet);
-        }
-
-    } catch (Exception e) {
-        logger.error("Exception in getResultset() - ", e);
-    } finally {
-        // Close resources
-        try {
-            if (resultSet != null) resultSet.close();
-            if (stmtObj != null) stmtObj.close();
-            if (connObj != null && !connObj.isClosed()) connObj.close();
-        } catch (Exception e) {
-            logger.error("Exception in getResultset() - finally block - ", e);
-        }
-    }
-
-    return resultArray;
-}
+2024-08-05 09:27:07,524 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.adminshared.participant.actions.ASTParticipantDetailsAction.findPartsetup(),684 -  Inside the Participant Setup Find  method 
+2024-08-05 09:27:07,524 http-/10.100.100.135:8643-3 [INFO] com.softeon.eso.shared.actions.ESODispatchAction.isSessionExpired(),60 - isSessionExpired - start - request.getRequestURL()=https://qa-usplans.astfinancial.com/espp-admin/admin/participantsetup.do | getQueryString()=method=findPartsetup
+2024-08-05 09:27:07,533 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.adminshared.participant.forms.ASTParticipantDetailsForm.createParticipantValueObject(),45 -  ACTIVE FLAG STATUS =  null
+2024-08-05 09:27:07,533 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.adminshared.participant.forms.ASTParticipantDetailsForm.createParticipantValueObject(),64 -  The Active Flaf null
+2024-08-05 09:27:07,533 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.adminshared.participant.actions.ParticipantDetailsAction.ruleValidation(),130 - ruleValidation-Starts here
+2024-08-05 09:27:07,536 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.shared.dbutils.DbManager.insertToDB(),1531 - insertToDB((String)ThreadContext.get(userID)):current ID = SSUBATHRA
+2024-08-05 09:27:07,536 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.shared.dbutils.DbManager.insertToDB(),1536 - { call sp_set_session_context( ?,?,?) }
+2024-08-05 09:27:07,555 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.adminshared.participant.actions.ASTParticipantDetailsAction.findPartsetup(),706 -  the map value  
+2024-08-05 09:27:07,555 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.adminshared.participant.model.dao.ASTParticipantSetupDAO.getParticipantsetupList(),955 -  Inside the Grid Load Method 
+2024-08-05 09:27:07,557 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.shared.dbutils.DbManager.insertToDB(),1531 - insertToDB((String)ThreadContext.get(userID)):current ID = SSUBATHRA
+2024-08-05 09:27:07,557 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.shared.dbutils.DbManager.insertToDB(),1536 - { call sp_set_session_context( ?,?,?) }
+2024-08-05 09:27:07,559 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.adminshared.participant.model.dao.ASTParticipantSetupDAO.getParticipantsetupList(),958 -  the Find SQL    SELECT PI.CLIENT_ID, PI.PARTICIPANT_ID, PI.FIRST_NAME,	 PI.LAST_NAME,  PI.MIDDLE_NAME,  PI.GLOBAL_ID,   PI.EMPL_ID,  PI.TAX_ID,   PI.BIRTH_DT,  PI.HIRE_DT, PI.FORM144_FLG, PI.SECTION16_FLG,  PI.PARTICIPANT_TYPE,  PI.EMPL_TYPE_CD,  PI.PATICIPANT_GRP, PI.PAYROLL_TYPE_CD,  PI.JOB_TITLE, PI.SUBSIDIARY_CD, PI.PROXY_RANK, PI.RANK,  PI.SHARE_PERCENT,  PI.GRADE_LEVEL,  PI.SLOA_EXIST_FLG, PI.DEPT_ID, PI.DIV_CD,  PI.OFFICER_FLG,PI.SYS_STATUS_CD,  PI.OFFICER_CD, PI.TERM_DT,  PI.TERM_REASON_CD,  PI.TERM_NOTIFY_DT,  PI.SHARE_HOLDER_TYPE_CD,  PI.HOME_ADDRESS_ID,  PI.TITLE_CD,  PI.PIN,  PI.USER_CD1,  PI.REINVEST_CD,  PI.TAX_CD, PI.LOC_ID, PI.USER_TEXT, PI.STATUS_CD,PI.PARTICIPANT_SUFFIX,  PI.ISO_CD , PI.MODIFY_USER, PI.MODIFY_DTM, PI.CREATE_USER, PI.CREATE_DTM ,  PI.SHARE_HOLDER_TYPE_CD,  PI.USER_TEXT2, PI.USER_TEXT3, PI.USER_TEXT4,PI.LONG_NAME,  PI.MAIL_ADDRESS_CD,  PI.WORK_ADDRESS_ID ,  PI.USER_CD2, PI.USER_CD3, PI.USER_CD4 , PI.PAY_ADDRESS_ID, PI.ANNUAL_INCOME,PI.ENROLL_REQ_HRS_FLG,PI.ENROLL_REQ_TIME_FLG,  PI.LIEN_GARNISH_FLG,PI.LIEN_GARNISH_ID, CS.NAME SUBSIDIARY_NAME, CL.LOC_NAME, CD.NAME DEPT_NAME,  CDIV.DIV_NAME, PG.GRP_DESC DESCRIPTION, AD1.ADDR_LINE1 AS  HOME_ADDR_LINE1, AD1.ADDR_LINE2  AS HOME_ADDR_LINE2,  AD1.ADDR_LINE3  AS HOME_ADDR_LINE3, AD1.ADDR_LINE4 AS   HOME_ADDR_LINE4,  AD1.ADDR_LINE5  AS HOME_ADDR_LINE5 ,AD1.CITY  AS HOME_CITY, AD1.STATE_CD AS  HOME_STATE_CD,  AD1.ZIP  AS  HOME_ZIP, AD1.ZIP_EXTN AS  HOME_ZIP_EXTN,  SP1.NAME AS HOME_STATE_NAME , C1.NAME AS  HOME_COUNTRY_NAME  ,  PI. GENDER , PI.CITIZEN_COUNTRY , C3.NAME AS CITIZEN_COUNTRY_NAME, PI.NUM_PIN,   AD2.ADDR_LINE1 AS  WORK_ADDR_LINE1, AD2.ADDR_LINE2 AS  WORK_ADDR_LINE2, AD2.ADDR_LINE3 AS  WORK_ADDR_LINE3,   AD2.ADDR_LINE4 AS  WORK_ADDR_LINE4,  AD2.ADDR_LINE5  AS WORK_ADDR_LINE5 ,AD2.CITY AS  WORK_CITY, AD2.STATE_CD AS  WORK_STATE_CD, AD2.ZIP  AS  WORK_ZIP , AD2.ZIP_EXTN AS  WORK_ZIP_EXTN,  SP2.NAME AS WORK_STATE_NAME , C2.NAME AS  WORK_COUNTRY_NAME , PI.MEMO_REF_ID , M.NOTES AS MEMO_NOTES,  PI.HOLD_LOST_FLG, PI.DO_NOT_GEN_CHK_FLG, PI.DO_NOT_GEN_STMT_FLG, PI.DEATH_DISABLE_DT,PI.LEND_BANK_FLG,PI.LEND_BANK_ABA_NUM,ACH.BANK_NAME,  AD3.ADDR_LINE1 AS  PAY_ADDR_LINE1, AD3.ADDR_LINE2 AS  PAY_ADDR_LINE2, AD3.ADDR_LINE3 AS  PAY_ADDR_LINE3,   AD3.ADDR_LINE4 AS  PAY_ADDR_LINE4,  AD3.ADDR_LINE5  AS PAY_ADDR_LINE5 ,AD3.CITY AS  PAY_CITY, AD3.STATE_CD AS  PAY_STATE_CD, AD3.ZIP  AS  PAY_ZIP , AD3.ZIP_EXTN AS  PAY_ZIP_EXTN,  SP3.NAME AS PAY_STATE_NAME , C4.NAME AS  PAY_COUNTRY_NAME ,PI.USER_NUMBER, PI.REGION , PI.PRECLEARANCE_FLG, PI1.GLOBAL_ID LEN_GLOBAL_ID, PAI.LAST_CONTACT_DT  ,PAI.UNRESPONSIVE_SEND_DT  FROM PARTICIPANT_INFO PI with (nolock)  LEFT OUTER JOIN PARTICIPANT_ADDL_INFO PAI  ON PAI.CLIENT_ID = PI.CLIENT_ID  AND  PAI.PARTICIPANT_ID = PI.PARTICIPANT_ID LEFT OUTER JOIN PARTICIPANT_INFO PI1 with (nolock) ON PI1.CLIENT_ID= PI.CLIENT_ID AND PI1.PARTICIPANT_ID = PI.LIEN_GARNISH_ID LEFT OUTER JOIN  CLIENT_SUBSIDIARY CS  ON   CS.CLIENT_ID 	  = PI.CLIENT_ID  AND  CS.SUBSIDIARY_CD = PI.SUBSIDIARY_CD LEFT OUTER JOIN CLIENT_LOCATION CL  ON  CL.CLIENT_ID 	  = PI.CLIENT_ID  AND CL.LOC_ID 		  = PI.LOC_ID LEFT OUTER JOIN  CLIENT_DEPARTMENT CD  ON  CD.CLIENT_ID 	  =   PI.CLIENT_ID AND CD.DEPT_CD 		  =   PI.DEPT_ID LEFT OUTER JOIN 	 CLIENT_DIVISION CDIV  ON  CDIV.CLIENT_ID    =   PI.CLIENT_ID AND CDIV.DIV_CD 	  =   PI.DIV_CD LEFT OUTER JOIN PARTICIPANT_GROUP_HDR PG  ON	PG.CLIENT_ID    	=   PI.CLIENT_ID AND PG.PARTICIPANT_GRP  =   PI.PATICIPANT_GRP  LEFT OUTER JOIN MEMO M ON  M.CLIENT_ID = PI.CLIENT_ID AND M.MEMO_REF_ID = PI.MEMO_REF_ID  LEFT OUTER JOIN   ADDRESS AD1 ON  AD1.ADDRESS_ID =  PI.HOME_ADDRESS_ID    LEFT OUTER JOIN STATE_PROVINCE SP1 ON  SP1.COUNTRY_CD 	  =   AD1.COUNTRY_CD  AND SP1.STATE_CD  	  =   AD1.STATE_CD LEFT OUTER JOIN COUNTRY C1 ON  C1.COUNTRY_CD 	  =  AD1.COUNTRY_CD    LEFT OUTER JOIN ADDRESS AD2  ON  AD2.ADDRESS_ID =  PI.WORK_ADDRESS_ID    LEFT OUTER JOIN STATE_PROVINCE SP2 ON  SP2.COUNTRY_CD 	  =   AD2.COUNTRY_CD  AND SP2.STATE_CD = AD2.STATE_CD LEFT OUTER JOIN COUNTRY C2 ON  C2.COUNTRY_CD 	  =  AD2.COUNTRY_CD  LEFT OUTER JOIN ADDRESS AD3 ON  AD3.ADDRESS_ID =  PI.PAY_ADDRESS_ID    LEFT OUTER JOIN STATE_PROVINCE SP3 ON  SP3.COUNTRY_CD 	  =   AD3.COUNTRY_CD  AND SP3.STATE_CD  =  AD3.STATE_CD LEFT OUTER JOIN COUNTRY C4 ON  C4.COUNTRY_CD 	  =  AD3.COUNTRY_CD    LEFT OUTER JOIN COUNTRY C3 ON  C3.COUNTRY_CD =  PI.CITIZEN_COUNTRY  LEFT OUTER JOIN  ACH_ABA_INFO ACH ON ACH.ABA_NUM = PI.LEND_BANK_ABA_NUM  WHERE PI.CLIENT_ID= ?  AND  PI.GLOBAL_ID = ?  
+2024-08-05 09:27:07,559 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.adminshared.participant.model.dao.ASTParticipantSetupDAO.getParticipantsetupList(),960 -  the Client Id   070203104
+2024-08-05 09:27:07,559 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.adminshared.participant.model.dao.ASTParticipantSetupDAO.getParticipantsetupList(),961 -  The Participant Id  000000006
+2024-08-05 09:27:07,568 http-/10.100.100.135:8643-3 [INFO] com.softeon.eso.shared.dbutils.EXConnection.SQLExceptionHandler(),190 - Going through PWI, throw SQL Exception
+com.microsoft.sqlserver.jdbc.SQLServerException: Invalid column name 'DEATH_DISABLE_DT'.
+	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:217) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1655) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.doExecutePreparedStatement(SQLServerPreparedStatement.java:440) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement$PrepStmtExecCmd.doExecute(SQLServerPreparedStatement.java:385) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.TDSCommand.execute(IOBuffer.java:7505) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.executeCommand(SQLServerConnection.java:2445) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeCommand(SQLServerStatement.java:191) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeStatement(SQLServerStatement.java:166) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.executeQuery(SQLServerPreparedStatement.java:297) ~[sqljdbc42-1.0.jar:?]
+	at org.apache.commons.dbcp2.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:83) ~[commons-dbcp2-2.1.1.jar:2.1.1]
+	at org.apache.commons.dbcp2.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:83) ~[commons-dbcp2-2.1.1.jar:2.1.1]
+	at com.softeon.eso.shared.dbutils.EXPreparedStatement.executeQuery(EXPreparedStatement.java:56) [esoShared-PHO.0.4.0.jar:?]
+	at com.softeon.eso.adminshared.participant.model.dao.ASTParticipantSetupDAO.getParticipantsetupList(ASTParticipantSetupDAO.java:968) [esoShared-PHO.0.4.0.jar:?]
+	at com.softeon.eso.adminshared.participant.actions.ASTParticipantDetailsAction.findPartsetup(ASTParticipantDetailsAction.java:708) [adminShared-PHO.0.5.0.jar:?]
+	at sun.reflect.GeneratedMethodAccessor5174.invoke(Unknown Source) ~[?:?]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_131]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_131]
+	at org.apache.struts.actions.DispatchAction.dispatchMethod(DispatchAction.java:270) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.actions.DispatchAction.execute(DispatchAction.java:187) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.action.RequestProcessor.processActionPerform(RequestProcessor.java:431) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.action.RequestProcessor.process(RequestProcessor.java:236) [struts-1.2.9.jar:1.2.9]
+	at com.softeon.eso.shared.service.ESORequestProcessor.process(ESORequestProcessor.java:39) [esoSharedWeb-PHO.0.4.0.jar:?]
+	at org.apache.struts.action.ActionServlet.process(ActionServlet.java:1196) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.action.ActionServlet.doPost(ActionServlet.java:432) [struts-1.2.9.jar:1.2.9]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:754) [jboss-servlet-api_3.0_spec-1.0.2.Final-redhat-2.jar!/:1.0.2.Final-redhat-2]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:847) [jboss-servlet-api_3.0_spec-1.0.2.Final-redhat-2.jar!/:1.0.2.Final-redhat-2]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:295) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at com.ast.eps.filter.RequestParameterFilter.doFilter(RequestParameterFilter.java:24) [classes:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at com.ast.eps.filter.DBConnctionFilter.doFilter(DBConnctionFilter.java:31) [classes:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at com.ast.sso.oidc.OIDCFilter.doFilter(OIDCFilter.java:218) [oidcCoreLite-PHO.0.5.0.jar:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.logging.log4j.web.Log4jServletFilter.doFilter(Log4jServletFilter.java:71) [log4j-web-2.17.1.jar:2.17.1]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:231) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:149) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.jboss.as.web.security.SecurityContextAssociationValve.invoke(SecurityContextAssociationValve.java:169) [jboss-as-web-7.5.0.Final-redhat-21.jar!/:7.5.0.Final-redhat-21]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:150) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:97) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:102) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:854) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(Http11Protocol.java:653) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:926) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+2024-08-05 09:27:07,571 http-/10.100.100.135:8643-3 [ERROR] com.softeon.eso.adminshared.participant.model.dao.ASTParticipantSetupDAO.getParticipantsetupList(),1086 - SQLException in getParticipantsetupList : 
+com.microsoft.sqlserver.jdbc.SQLServerException: Invalid column name 'DEATH_DISABLE_DT'.
+	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:217) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1655) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.doExecutePreparedStatement(SQLServerPreparedStatement.java:440) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement$PrepStmtExecCmd.doExecute(SQLServerPreparedStatement.java:385) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.TDSCommand.execute(IOBuffer.java:7505) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.executeCommand(SQLServerConnection.java:2445) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeCommand(SQLServerStatement.java:191) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeStatement(SQLServerStatement.java:166) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.executeQuery(SQLServerPreparedStatement.java:297) ~[sqljdbc42-1.0.jar:?]
+	at org.apache.commons.dbcp2.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:83) ~[commons-dbcp2-2.1.1.jar:2.1.1]
+	at org.apache.commons.dbcp2.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:83) ~[commons-dbcp2-2.1.1.jar:2.1.1]
+	at com.softeon.eso.shared.dbutils.EXPreparedStatement.executeQuery(EXPreparedStatement.java:56) ~[esoShared-PHO.0.4.0.jar:?]
+	at com.softeon.eso.adminshared.participant.model.dao.ASTParticipantSetupDAO.getParticipantsetupList(ASTParticipantSetupDAO.java:968) [esoShared-PHO.0.4.0.jar:?]
+	at com.softeon.eso.adminshared.participant.actions.ASTParticipantDetailsAction.findPartsetup(ASTParticipantDetailsAction.java:708) [adminShared-PHO.0.5.0.jar:?]
+	at sun.reflect.GeneratedMethodAccessor5174.invoke(Unknown Source) ~[?:?]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_131]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_131]
+	at org.apache.struts.actions.DispatchAction.dispatchMethod(DispatchAction.java:270) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.actions.DispatchAction.execute(DispatchAction.java:187) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.action.RequestProcessor.processActionPerform(RequestProcessor.java:431) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.action.RequestProcessor.process(RequestProcessor.java:236) [struts-1.2.9.jar:1.2.9]
+	at com.softeon.eso.shared.service.ESORequestProcessor.process(ESORequestProcessor.java:39) [esoSharedWeb-PHO.0.4.0.jar:?]
+	at org.apache.struts.action.ActionServlet.process(ActionServlet.java:1196) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.action.ActionServlet.doPost(ActionServlet.java:432) [struts-1.2.9.jar:1.2.9]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:754) [jboss-servlet-api_3.0_spec-1.0.2.Final-redhat-2.jar!/:1.0.2.Final-redhat-2]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:847) [jboss-servlet-api_3.0_spec-1.0.2.Final-redhat-2.jar!/:1.0.2.Final-redhat-2]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:295) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at com.ast.eps.filter.RequestParameterFilter.doFilter(RequestParameterFilter.java:24) [classes:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at com.ast.eps.filter.DBConnctionFilter.doFilter(DBConnctionFilter.java:31) [classes:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at com.ast.sso.oidc.OIDCFilter.doFilter(OIDCFilter.java:218) [oidcCoreLite-PHO.0.5.0.jar:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.logging.log4j.web.Log4jServletFilter.doFilter(Log4jServletFilter.java:71) [log4j-web-2.17.1.jar:2.17.1]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:231) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:149) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.jboss.as.web.security.SecurityContextAssociationValve.invoke(SecurityContextAssociationValve.java:169) [jboss-as-web-7.5.0.Final-redhat-21.jar!/:7.5.0.Final-redhat-21]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:150) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:97) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:102) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:854) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(Http11Protocol.java:653) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:926) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+2024-08-05 09:27:07,574 http-/10.100.100.135:8643-3 [INFO] com.softeon.eso.shared.actions.ASTESODispatchActionUtil.handleSQLException(),50 - super.handleSQLException(request,sqlE); - start
+2024-08-05 09:27:07,574 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.shared.actions.ASTESODispatchActionUtil.handleSQLException(),51 - Message : Invalid column name 'DEATH_DISABLE_DT'.
+2024-08-05 09:27:07,574 http-/10.100.100.135:8643-3 [ERROR] com.softeon.eso.shared.actions.ASTESODispatchActionUtil.handleSQLException(),52 - Error Code : 207
+2024-08-05 09:27:07,574 http-/10.100.100.135:8643-3 [ERROR] com.softeon.eso.shared.actions.ASTESODispatchActionUtil.handleSQLException(),53 - Error while executing Participant Setup Find method : 
+com.microsoft.sqlserver.jdbc.SQLServerException: Invalid column name 'DEATH_DISABLE_DT'.
+	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:217) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1655) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.doExecutePreparedStatement(SQLServerPreparedStatement.java:440) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement$PrepStmtExecCmd.doExecute(SQLServerPreparedStatement.java:385) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.TDSCommand.execute(IOBuffer.java:7505) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.executeCommand(SQLServerConnection.java:2445) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeCommand(SQLServerStatement.java:191) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeStatement(SQLServerStatement.java:166) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.executeQuery(SQLServerPreparedStatement.java:297) ~[sqljdbc42-1.0.jar:?]
+	at org.apache.commons.dbcp2.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:83) ~[commons-dbcp2-2.1.1.jar:2.1.1]
+	at org.apache.commons.dbcp2.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:83) ~[commons-dbcp2-2.1.1.jar:2.1.1]
+	at com.softeon.eso.shared.dbutils.EXPreparedStatement.executeQuery(EXPreparedStatement.java:56) ~[esoShared-PHO.0.4.0.jar:?]
+	at com.softeon.eso.adminshared.participant.model.dao.ASTParticipantSetupDAO.getParticipantsetupList(ASTParticipantSetupDAO.java:968) ~[esoShared-PHO.0.4.0.jar:?]
+	at com.softeon.eso.adminshared.participant.actions.ASTParticipantDetailsAction.findPartsetup(ASTParticipantDetailsAction.java:708) [adminShared-PHO.0.5.0.jar:?]
+	at sun.reflect.GeneratedMethodAccessor5174.invoke(Unknown Source) ~[?:?]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_131]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_131]
+	at org.apache.struts.actions.DispatchAction.dispatchMethod(DispatchAction.java:270) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.actions.DispatchAction.execute(DispatchAction.java:187) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.action.RequestProcessor.processActionPerform(RequestProcessor.java:431) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.action.RequestProcessor.process(RequestProcessor.java:236) [struts-1.2.9.jar:1.2.9]
+	at com.softeon.eso.shared.service.ESORequestProcessor.process(ESORequestProcessor.java:39) [esoSharedWeb-PHO.0.4.0.jar:?]
+	at org.apache.struts.action.ActionServlet.process(ActionServlet.java:1196) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.action.ActionServlet.doPost(ActionServlet.java:432) [struts-1.2.9.jar:1.2.9]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:754) [jboss-servlet-api_3.0_spec-1.0.2.Final-redhat-2.jar!/:1.0.2.Final-redhat-2]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:847) [jboss-servlet-api_3.0_spec-1.0.2.Final-redhat-2.jar!/:1.0.2.Final-redhat-2]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:295) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at com.ast.eps.filter.RequestParameterFilter.doFilter(RequestParameterFilter.java:24) [classes:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at com.ast.eps.filter.DBConnctionFilter.doFilter(DBConnctionFilter.java:31) [classes:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at com.ast.sso.oidc.OIDCFilter.doFilter(OIDCFilter.java:218) [oidcCoreLite-PHO.0.5.0.jar:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.logging.log4j.web.Log4jServletFilter.doFilter(Log4jServletFilter.java:71) [log4j-web-2.17.1.jar:2.17.1]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:231) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:149) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.jboss.as.web.security.SecurityContextAssociationValve.invoke(SecurityContextAssociationValve.java:169) [jboss-as-web-7.5.0.Final-redhat-21.jar!/:7.5.0.Final-redhat-21]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:150) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:97) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:102) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:854) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(Http11Protocol.java:653) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:926) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
+2024-08-05 09:27:07,574 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.shared.actions.AbstractESODispatchActionUtil.getMessageKey(),40 - getMessageKey - start
+2024-08-05 09:27:07,574 http-/10.100.100.135:8643-3 [INFO] com.softeon.eso.shared.actions.AbstractESODispatchActionUtil.getDBExceptionMsgs(),85 - getDBExceptionMsgs - start
+2024-08-05 09:27:07,575 http-/10.100.100.135:8643-3 [INFO] com.softeon.eso.shared.service.ESOExceptionHandler.setExceptionMsgs(),55 - Inside setExceptionMsgs
+2024-08-05 09:27:07,575 http-/10.100.100.135:8643-3 [INFO] com.softeon.eso.shared.model.dao.ESOExceptionHandlerDAO.getMessages(),70 - Inside the getMessages
+2024-08-05 09:27:07,575 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.shared.model.dao.ESOExceptionHandlerDAO.getMessages(),88 -  The Message Popup Details Query : >>>>>>>>>   SELECT MESG_NO,MESG_DESC,MESG_TYPE FROM MESSAGE WHERE MESG_NO = 999999999
+2024-08-05 09:27:07,577 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.shared.dbutils.DbManager.insertToDB(),1531 - insertToDB((String)ThreadContext.get(userID)):current ID = SSUBATHRA
+2024-08-05 09:27:07,577 http-/10.100.100.135:8643-3 [DEBUG] com.softeon.eso.shared.dbutils.DbManager.insertToDB(),1536 - { call sp_set_session_context( ?,?,?) }
+2024-08-05 09:27:07,582 http-/10.100.100.135:8643-3 [ERROR] com.softeon.eso.shared.utils.GlobalExceptionHandler.log(),31 - /espp-admin : Invalid column name 'DEATH_DISABLE_DT'.
+com.microsoft.sqlserver.jdbc.SQLServerException: Invalid column name 'DEATH_DISABLE_DT'.
+	at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:217) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1655) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.doExecutePreparedStatement(SQLServerPreparedStatement.java:440) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement$PrepStmtExecCmd.doExecute(SQLServerPreparedStatement.java:385) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.TDSCommand.execute(IOBuffer.java:7505) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerConnection.executeCommand(SQLServerConnection.java:2445) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeCommand(SQLServerStatement.java:191) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerStatement.executeStatement(SQLServerStatement.java:166) ~[sqljdbc42-1.0.jar:?]
+	at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.executeQuery(SQLServerPreparedStatement.java:297) ~[sqljdbc42-1.0.jar:?]
+	at org.apache.commons.dbcp2.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:83) ~[commons-dbcp2-2.1.1.jar:2.1.1]
+	at org.apache.commons.dbcp2.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:83) ~[commons-dbcp2-2.1.1.jar:2.1.1]
+	at com.softeon.eso.shared.dbutils.EXPreparedStatement.executeQuery(EXPreparedStatement.java:56) ~[esoShared-PHO.0.4.0.jar:?]
+	at com.softeon.eso.adminshared.participant.model.dao.ASTParticipantSetupDAO.getParticipantsetupList(ASTParticipantSetupDAO.java:968) ~[esoShared-PHO.0.4.0.jar:?]
+	at com.softeon.eso.adminshared.participant.actions.ASTParticipantDetailsAction.findPartsetup(ASTParticipantDetailsAction.java:708) [adminShared-PHO.0.5.0.jar:?]
+	at sun.reflect.GeneratedMethodAccessor5174.invoke(Unknown Source) ~[?:?]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_131]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_131]
+	at org.apache.struts.actions.DispatchAction.dispatchMethod(DispatchAction.java:270) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.actions.DispatchAction.execute(DispatchAction.java:187) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.action.RequestProcessor.processActionPerform(RequestProcessor.java:431) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.action.RequestProcessor.process(RequestProcessor.java:236) [struts-1.2.9.jar:1.2.9]
+	at com.softeon.eso.shared.service.ESORequestProcessor.process(ESORequestProcessor.java:39) [esoSharedWeb-PHO.0.4.0.jar:?]
+	at org.apache.struts.action.ActionServlet.process(ActionServlet.java:1196) [struts-1.2.9.jar:1.2.9]
+	at org.apache.struts.action.ActionServlet.doPost(ActionServlet.java:432) [struts-1.2.9.jar:1.2.9]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:754) [jboss-servlet-api_3.0_spec-1.0.2.Final-redhat-2.jar!/:1.0.2.Final-redhat-2]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:847) [jboss-servlet-api_3.0_spec-1.0.2.Final-redhat-2.jar!/:1.0.2.Final-redhat-2]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:295) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at com.ast.eps.filter.RequestParameterFilter.doFilter(RequestParameterFilter.java:24) [classes:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at com.ast.eps.filter.DBConnctionFilter.doFilter(DBConnctionFilter.java:31) [classes:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at com.ast.sso.oidc.OIDCFilter.doFilter(OIDCFilter.java:218) [oidcCoreLite-PHO.0.5.0.jar:?]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.logging.log4j.web.Log4jServletFilter.doFilter(Log4jServletFilter.java:71) [log4j-web-2.17.1.jar:2.17.1]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:246) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:214) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:231) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:149) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.jboss.as.web.security.SecurityContextAssociationValve.invoke(SecurityContextAssociationValve.java:169) [jboss-as-web-7.5.0.Final-redhat-21.jar!/:7.5.0.Final-redhat-21]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:150) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:97) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:102) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:854) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(Http11Protocol.java:653) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:926) [jbossweb-7.5.7.Final-redhat-1.jar!/:7.5.7.Final-redhat-1]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_131]
